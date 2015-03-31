@@ -1,62 +1,66 @@
 /**
- * UnBreak v2.0.0
- * 
+ * UnBreak v2.1.0
+ *
  * @author	Patrick Kunka
+ * @author  Frank Rue (AMD modification only for RequireJS)
  */
 
-(function(window) {
-    'use strict';
+define([],function() {
 
-    var UnBreak = function(node) {
-        this.minWords = 0;
+  'use strict';
 
-        this.init(node);
-    };
+  var UnBreak = function(node) {
+      this.minWords = 0;
 
-    UnBreak.prototype = {
-        constructor: UnBreak,
+      this.init(node);
+  };
 
-        unBreak: function(node) {
-            var self = this;
+  UnBreak.prototype = {
+    
+      constructor: UnBreak,
 
-            if (node.nodeValue && Array.prototype.indexOf) {
-                var value = node.nodeValue,
-                    space = '\u0020',
-                    totalWords = value.split('\u0020').length,
-                    index = value.lastIndexOf(space);
+      unBreak: function(node) {
+          var self = this;
 
-                (index > -1 && totalWords >= self.minWords) && (node.nodeValue = self.replaceAt(value, index, "\u00A0"));
-            }
-        },
+          if (node.nodeValue && Array.prototype.indexOf) {
+              var value = node.nodeValue,
+                  space = '\u0020',
+                  totalWords = value.split('\u0020').length,
+                  index = value.lastIndexOf(space);
 
-        replaceAt: function(str, index, chr) {
-            if (index > str.length - 1) return str;
+              (index > -1 && totalWords >= self.minWords) && (node.nodeValue = self.replaceAt(value, index, "\u00A0"));
+          }
+      },
 
-            return str.substr(0, index) + chr + str.substr(index + 1);
-        },
+      replaceAt: function(str, index, chr) {
+          if (index > str.length - 1) return str;
 
-        findChildren: function(node) {
-            var self = this;
+          return str.substr(0, index) + chr + str.substr(index + 1);
+      },
 
-            if (node.childNodes.length){
-                var lastChild = node.childNodes[node.childNodes.length - 1];
+      findChildren: function(node) {
+          var self = this;
 
-                !lastChild.childNodes.length ?
-                    self.unBreak(lastChild) :
-                    self.findChildren(lastChild);
-            } else {
-                unBreak(node);
-            }
-        },
+          if (node.childNodes.length){
+              var lastChild = node.childNodes[node.childNodes.length - 1];
 
-        init: function(node) {
-            var self = this;
-            
-            self.minWords = (node.getAttribute('data-min') * 1) || 0;
+              !lastChild.childNodes.length ?
+                  self.unBreak(lastChild) :
+                  self.findChildren(lastChild);
+          } else {
+              unBreak(node);
+          }
+      },
 
-            self.findChildren(node);
-        }
-    };
+      init: function(node) {
+          var self = this;
 
-    window.UnBreak = UnBreak;
-})(window);
+          self.minWords = (node.getAttribute('data-min') * 1) || 0;
+
+          self.findChildren(node);
+      }
+  };
+
+  return UnBreak;
+
+});

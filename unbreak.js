@@ -16,14 +16,14 @@ define([],function() {
   };
 
   UnBreak.prototype = {
-    
+
       constructor: UnBreak,
 
       unBreak: function(node) {
           var self = this;
 
           if (node.nodeValue && Array.prototype.indexOf) {
-              var value = node.nodeValue,
+              var value = node.nodeValue.trim(),
                   space = '\u0020',
                   totalWords = value.split('\u0020').length,
                   index = value.lastIndexOf(space);
